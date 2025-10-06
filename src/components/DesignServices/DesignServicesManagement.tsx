@@ -1,31 +1,32 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import {
-  createService,
-  deleteService,
-  getServices,
-  Service,
-  updateService,
-  UpdateServiceDto,
-  CreateServiceDto,
-} from "../../../services/apiServices";
-import { SERVICE_PAGES } from "../../config/servicePages";
+  createDesignService,
+  deleteDesignService,
+  DesignService,
+  getDesignServices,
+  updateDesignService,
+  UpdateDesignServiceDto,
+  CreateDesignServiceDto,
+} from "../../../services/apiDesignServices";
+import { DESIGN_SERVICE_PAGES } from "../../config/designServicePages";
 
-const ServicesManagement: React.FC = () => {
-  const [services, setServices] = useState<Service[]>([]);
+const DesignServicesManagement: React.FC = () => {
+  const [services, setServices] = useState<DesignService[]>([]);
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [editingService, setEditingService] = useState<DesignService | null>(
+    null
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
-  // Form state
   const [formData, setFormData] = useState({
     page_number: 1,
     title_ar: "",
@@ -36,67 +37,57 @@ const ServicesManagement: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
 
-  // Fetch services by page
   useEffect(() => {
     fetchServices();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPage]);
 
-  // Filter services based on search term
   const filteredServices = services.filter(
-    (service) =>
-      service.titleAr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (service.descriptionAr &&
-        service.descriptionAr
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())) ||
-      (service.descriptionEn &&
-        service.descriptionEn.toLowerCase().includes(searchTerm.toLowerCase()))
+    (s) =>
+      s.titleAr.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.descriptionAr &&
+        s.descriptionAr.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (s.descriptionEn &&
+        s.descriptionEn.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentServices = filteredServices.slice(
+  const currentItems = filteredServices.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
   const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
 
-  // Handle search
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1);
   };
 
   const fetchServices = async () => {
     setIsLoading(true);
     try {
-      const data = await getServices(selectedPage);
+      const data = await getDesignServices(selectedPage);
       setServices(data);
-    } catch (error) {
-      console.error("Error fetching services:", error);
-      toast.error("حدث خطأ أثناء تحميل الخدمات");
+    } catch (e) {
+      console.error(e);
+      toast.error("حدث خطأ أثناء تحميل خدمات التصميم");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle image file selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedImage(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
+      reader.onloadend = () => setImagePreview(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
-  // Open modal for adding new service
   const handleOpenAddModal = () => {
     setEditingService(null);
     setFormData({
@@ -111,8 +102,7 @@ const ServicesManagement: React.FC = () => {
     setShowModal(true);
   };
 
-  // Open modal for editing service
-  const handleOpenEditModal = (service: Service) => {
+  const handleOpenEditModal = (service: DesignService) => {
     setEditingService(service);
     setFormData({
       page_number: service.pageNumber,
@@ -126,60 +116,40 @@ const ServicesManagement: React.FC = () => {
     setShowModal(true);
   };
 
-  // Handle form submission
   const handleSubmit = async () => {
-    // Validation
     if (!formData.title_ar || !formData.title_en) {
       toast.error("الرجاء إدخال العنوان بالعربية والإنجليزية");
       return;
     }
-
     if (!editingService && !selectedImage) {
       toast.error("الرجاء اختيار صورة للخدمة");
       return;
     }
 
-    // Show loading toast
     const loadingToast = toast.loading(
-      editingService ? "جاري تحديث الخدمة..." : "جاري إضافة الخدمة..."
+      editingService ? "جاري تحديث خدمة التصميم..." : "جاري إضافة خدمة تصميم..."
     );
-
     try {
       if (editingService) {
-        // Update existing service
-        const updateData: UpdateServiceDto = {
+        const updateData: UpdateDesignServiceDto = {
           page_number: formData.page_number,
           title_ar: formData.title_ar,
           title_en: formData.title_en,
           description_ar: formData.description_ar,
           description_en: formData.description_en,
         };
-
-        if (selectedImage) {
-          updateData.image = selectedImage;
-        }
-
-        const updatedService = await updateService(
+        if (selectedImage) updateData.image = selectedImage;
+        const updated = await updateDesignService(
           editingService.id,
           updateData
         );
         setServices(
-          services.map((s) => (s.id === editingService.id ? updatedService : s))
+          services.map((s) => (s.id === editingService.id ? updated : s))
         );
         toast.dismiss(loadingToast);
-        toast.success("تم تحديث الخدمة بنجاح");
+        toast.success("تم تحديث خدمة التصميم بنجاح");
       } else {
-        // Create new service
-        console.log("📝 Creating service with data:", {
-          page_number: formData.page_number,
-          title_ar: formData.title_ar,
-          title_en: formData.title_en,
-          image_name: selectedImage?.name,
-          image_size: selectedImage?.size,
-          image_type: selectedImage?.type,
-        });
-
-        const createData: CreateServiceDto = {
+        const payload: CreateDesignServiceDto = {
           page_number: formData.page_number,
           title_ar: formData.title_ar,
           title_en: formData.title_en,
@@ -187,39 +157,31 @@ const ServicesManagement: React.FC = () => {
           description_en: formData.description_en,
           image: selectedImage!,
         };
-
-        const newService = await createService(createData);
-        setServices([...services, newService]);
+        const created = await createDesignService(payload);
+        setServices([...services, created]);
         toast.dismiss(loadingToast);
-        toast.success("تمت إضافة الخدمة بنجاح");
+        toast.success("تمت إضافة خدمة التصميم بنجاح");
       }
-
       setShowModal(false);
       fetchServices();
-    } catch (error) {
+    } catch (e) {
       toast.dismiss(loadingToast);
-      console.error("❌ Error saving service:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "حدث خطأ أثناء حفظ الخدمة";
-      toast.error(errorMessage);
+      const msg =
+        e instanceof Error ? e.message : "حدث خطأ أثناء حفظ خدمة التصميم";
+      toast.error(msg);
     }
   };
 
-  // Handle delete service
   const handleDelete = async (id: number) => {
-    if (!confirm("هل أنت متأكد من حذف هذه الخدمة؟")) {
-      return;
-    }
-
+    if (!confirm("هل أنت متأكد من حذف هذه الخدمة؟")) return;
     try {
-      await deleteService(id);
+      await deleteDesignService(id);
       setServices(services.filter((s) => s.id !== id));
-      toast.success("تم حذف الخدمة بنجاح");
-    } catch (error) {
-      console.error("Error deleting service:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "حدث خطأ أثناء حذف الخدمة";
-      toast.error(errorMessage);
+      toast.success("تم حذف خدمة التصميم بنجاح");
+    } catch (e) {
+      const msg =
+        e instanceof Error ? e.message : "حدث خطأ أثناء حذف خدمة التصميم";
+      toast.error(msg);
     }
   };
 
@@ -229,10 +191,9 @@ const ServicesManagement: React.FC = () => {
         <div className="trezo-card-header mb-[20px] md:mb-[25px] flex flex-wrap items-center justify-between">
           <div className="trezo-card-title">
             <h5 className="!mb-0 text-black dark:text-white font-bold text-lg">
-              إدارة الخدمات
+              إدارة خدمات التصميم
             </h5>
           </div>
-
           <div className="trezo-card-subtitle mt-[15px] sm:mt-0">
             <button
               onClick={handleOpenAddModal}
@@ -242,16 +203,15 @@ const ServicesManagement: React.FC = () => {
                 <i className="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">
                   add
                 </i>
-                إضافة خدمة جديدة
+                إضافة خدمة تصميم
               </span>
             </button>
           </div>
         </div>
 
-        {/* Page Selection */}
         <div className="trezo-card-content">
           <div className="mb-[20px] flex gap-[10px] flex-wrap">
-            {SERVICE_PAGES.map((page) => (
+            {DESIGN_SERVICE_PAGES.map((page) => (
               <button
                 key={page.id}
                 onClick={() => setSelectedPage(page.id)}
@@ -266,12 +226,11 @@ const ServicesManagement: React.FC = () => {
             ))}
           </div>
 
-          {/* Search Bar */}
           <div className="mb-[20px]">
             <div className="relative">
               <input
                 type="text"
-                placeholder="البحث في الخدمات..."
+                placeholder="البحث في خدمات التصميم..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 className="w-full ltr:pl-[40px] rtl:pr-[40px] ltr:pr-[15px] rtl:pl-[15px] py-[10px] border border-gray-200 dark:border-[#172036] rounded-md dark:bg-[#15203c] dark:text-white focus:outline-none focus:border-primary-500"
@@ -280,7 +239,6 @@ const ServicesManagement: React.FC = () => {
             </div>
           </div>
 
-          {/* Services Content */}
           {isLoading ? (
             <div className="text-center py-12 text-gray-500 dark:text-gray-400">
               جاري التحميل...
@@ -306,14 +264,13 @@ const ServicesManagement: React.FC = () => {
                       <th className="px-[20px] py-[15px] text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         العنوان (إنجليزي)
                       </th>
-
                       <th className="px-[20px] py-[15px] text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         الإجراءات
                       </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white dark:bg-[#0c1427] divide-y divide-gray-200 dark:divide-[#172036]">
-                    {currentServices.map((service) => (
+                    {currentItems.map((service) => (
                       <tr
                         key={service.id}
                         className="hover:bg-gray-50 dark:hover:bg-[#15203c]"
@@ -338,7 +295,6 @@ const ServicesManagement: React.FC = () => {
                             {service.titleEn}
                           </div>
                         </td>
-
                         <td className="px-[20px] py-[15px] whitespace-nowrap text-sm font-medium">
                           <div className="flex gap-[5px]">
                             <button
@@ -363,7 +319,6 @@ const ServicesManagement: React.FC = () => {
                 </table>
               </div>
 
-              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="mt-[20px] px-[20px] py-[15px] border-t border-gray-200 dark:border-[#172036] flex items-center justify-between">
                   <div className="text-sm text-gray-700 dark:text-gray-300">
@@ -413,7 +368,6 @@ const ServicesManagement: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal */}
       <Dialog
         open={showModal}
         onClose={() => setShowModal(false)}
@@ -423,7 +377,6 @@ const ServicesManagement: React.FC = () => {
           transition
           className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
         />
-
         <div className="fixed inset-0 z-50 w-screen overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <DialogPanel
@@ -434,16 +387,18 @@ const ServicesManagement: React.FC = () => {
                 <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-[25px] py-[20px] flex items-center justify-between">
                   <div className="flex items-center gap-[15px]">
                     <div className="w-[40px] h-[40px] bg-white/20 rounded-lg flex items-center justify-center">
-                      <i className="ri-service-line text-white text-xl"></i>
+                      <i className="ri-paint-brush-line text-white text-xl"></i>
                     </div>
                     <div>
                       <h5 className="text-xl font-bold !text-white mb-0">
-                        {editingService ? "تعديل الخدمة" : "إضافة خدمة جديدة"}
+                        {editingService
+                          ? "تعديل خدمة تصميم"
+                          : "إضافة خدمة تصميم"}
                       </h5>
                       <p className="text-white/80 text-sm mt-1">
                         {editingService
-                          ? "قم بتحديث معلومات الخدمة"
-                          : "أضف خدمة جديدة إلى النظام"}
+                          ? "قم بتحديث معلومات خدمة التصميم"
+                          : "أضف خدمة تصميم جديدة"}
                       </p>
                     </div>
                   </div>
@@ -457,10 +412,9 @@ const ServicesManagement: React.FC = () => {
 
                 <div className="p-[25px]">
                   <div className="space-y-[20px]">
-                    {/* Page Number */}
                     <div>
                       <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                        صفحة الخدمة
+                        صفحة خدمة التصميم
                       </label>
                       <select
                         value={formData.page_number}
@@ -472,15 +426,14 @@ const ServicesManagement: React.FC = () => {
                         }
                         className="w-full border border-gray-300 dark:border-[#172036] rounded-lg px-[15px] py-[12px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                       >
-                        {SERVICE_PAGES.map((page) => (
-                          <option key={page.id} value={page.id}>
-                            {page.nameAr} ({page.nameEn})
+                        {DESIGN_SERVICE_PAGES.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.nameAr} ({p.nameEn})
                           </option>
                         ))}
                       </select>
                     </div>
 
-                    {/* Titles */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px]">
                       <div>
                         <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
@@ -499,7 +452,6 @@ const ServicesManagement: React.FC = () => {
                           placeholder="أدخل العنوان بالعربية"
                         />
                       </div>
-
                       <div>
                         <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
                           العنوان (إنجليزي) *
@@ -519,7 +471,6 @@ const ServicesManagement: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Descriptions */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px]">
                       <div>
                         <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
@@ -538,7 +489,6 @@ const ServicesManagement: React.FC = () => {
                           placeholder="أدخل الوصف بالعربية"
                         />
                       </div>
-
                       <div>
                         <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
                           الوصف (إنجليزي)
@@ -558,10 +508,9 @@ const ServicesManagement: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Image Upload */}
                     <div>
                       <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                        صورة الخدمة {!editingService && "*"}
+                        صورة خدمة التصميم {!editingService && "*"}
                       </label>
                       <div className="border-2 border-dashed border-gray-300 dark:border-[#172036] rounded-lg p-[20px] text-center hover:border-primary-500 transition-colors">
                         <input
@@ -569,10 +518,10 @@ const ServicesManagement: React.FC = () => {
                           accept="image/*"
                           onChange={handleImageChange}
                           className="hidden"
-                          id="image-upload"
+                          id="ds-image-upload"
                         />
                         <label
-                          htmlFor="image-upload"
+                          htmlFor="ds-image-upload"
                           className="cursor-pointer flex flex-col items-center gap-[10px]"
                         >
                           <div className="w-[60px] h-[60px] bg-gray-100 dark:bg-[#15203c] rounded-lg flex items-center justify-center">
@@ -601,7 +550,6 @@ const ServicesManagement: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div className="flex gap-[15px] mt-[30px] pt-[25px] border-t border-gray-200 dark:border-[#172036]">
                     <button
                       onClick={handleSubmit}
@@ -628,4 +576,4 @@ const ServicesManagement: React.FC = () => {
   );
 };
 
-export default ServicesManagement;
+export default DesignServicesManagement;

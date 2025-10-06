@@ -5,52 +5,41 @@ export interface Pricing {
   pageNumber: number;
   titleAr: string;
   titleEn: string;
-  subtitleAr?: string;
-  subtitleEn?: string;
   price: number;
-  currency: string;
-  periodAr?: string;
-  periodEn?: string;
-  featuresAr?: string;
-  featuresEn?: string;
-  isFeatured: boolean;
-  displayOrder: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  items?: PriceItem[];
+}
+
+export interface PriceItem {
+  id: number;
+  pricingId: number;
+  textAr: string;
+  textEn: string;
+  displayOrder: number;
+  isActive: boolean;
 }
 
 export interface CreatePricingDto {
   page_number: number;
   title_ar: string;
   title_en: string;
-  subtitle_ar?: string;
-  subtitle_en?: string;
   price: number;
-  currency?: string;
-  period_ar?: string;
-  period_en?: string;
-  features_ar?: string;
-  features_en?: string;
-  is_featured?: boolean;
-  display_order?: number;
+  items?: Array<{ text_ar: string; text_en: string; display_order?: number }>;
 }
 
 export interface UpdatePricingDto {
   page_number?: number;
   title_ar?: string;
   title_en?: string;
-  subtitle_ar?: string;
-  subtitle_en?: string;
   price?: number;
-  currency?: string;
-  period_ar?: string;
-  period_en?: string;
-  features_ar?: string;
-  features_en?: string;
-  is_featured?: boolean;
-  display_order?: number;
   is_active?: boolean;
+  items?: Array<{
+    text_ar: string;
+    text_en: string;
+    display_order?: number;
+  }>;
 }
 
 // Get all pricings or filter by page number

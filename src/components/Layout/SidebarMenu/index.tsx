@@ -66,6 +66,106 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ toggleActive }) => {
               إدارة شعارات البراند
             </Link>
 
+            <div className="accordion-item rounded-md text-black dark:text-white mb-[5px] whitespace-nowrap">
+              <button
+                className={`accordion-button toggle flex items-center transition-all py-[9px] ltr:pl-[14px] ltr:pr-[30px] rtl:pr-[14px] rtl:pl-[30px] rounded-md font-medium w-full relative hover:bg-gray-50 text-left dark:hover:bg-[#15203c] ${
+                  openIndex === 1 ? "open" : ""
+                }`}
+                type="button"
+                onClick={() => toggleAccordion(1)}
+              >
+                <i className="material-symbols-outlined transition-all text-gray-500 dark:text-gray-400 ltr:mr-[7px] rtl:ml-[7px] !text-[22px] leading-none relative -top-px">
+                  web
+                </i>
+                <span className="title leading-none">خدمات ويب</span>
+              </button>
+
+              <div
+                className={`accordion-collapse ${
+                  openIndex === 1 ? "open" : "hidden"
+                }`}
+              >
+                <div className="pt-[4px]">
+                  <ul className="sidebar-sub-menu">
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/services"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/services" ? "active" : ""
+                        }`}
+                      >
+                        <i className="ri-service-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة الخدمات
+                      </Link>
+                    </li>
+
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/pricings"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/pricings" ? "active" : ""
+                        }`}
+                      >
+                        <i className="ri-price-tag-3-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة الأسعار
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="accordion-item rounded-md text-black dark:text-white mb-[5px] whitespace-nowrap">
+              <button
+                className={`accordion-button toggle flex items-center transition-all py-[9px] ltr:pl-[14px] ltr:pr-[30px] rtl:pr-[14px] rtl:pl-[30px] rounded-md font-medium w-full relative hover:bg-gray-50 text-left dark:hover:bg-[#15203c] ${
+                  openIndex === 3 ? "open" : ""
+                }`}
+                type="button"
+                onClick={() => toggleAccordion(3)}
+              >
+                <i className="ri-paint-brush-line transition-all text-gray-500 dark:text-gray-400 ltr:mr-[7px] rtl:ml-[7px] !text-[20px] leading-none relative -top-px"></i>
+                <span className="title leading-none">خدمات التصميم</span>
+              </button>
+
+              <div
+                className={`accordion-collapse ${
+                  openIndex === 3 ? "open" : "hidden"
+                }`}
+              >
+                <div className="pt-[4px]">
+                  <ul className="sidebar-sub-menu">
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/design-services"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/design-services"
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <i className="ri-layout-4-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة خدمات التصميم
+                      </Link>
+                    </li>
+
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/design-pricings"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/design-pricings"
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <i className="ri-price-tag-3-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة أسعار التصميم
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
             <span className="block relative font-medium uppercase text-gray-400 mb-[8px] text-xs [&:not(:first-child)]:mt-[22px]">
               أخري
             </span>
@@ -87,10 +187,10 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ toggleActive }) => {
             <div className="accordion-item rounded-md text-black dark:text-white mb-[5px] whitespace-nowrap">
               <button
                 className={`accordion-button toggle flex items-center transition-all py-[9px] ltr:pl-[14px] ltr:pr-[30px] rtl:pr-[14px] rtl:pl-[30px] rounded-md font-medium w-full relative hover:bg-gray-50 text-left dark:hover:bg-[#15203c] ${
-                  openIndex === 29 ? "open" : ""
+                  openIndex === 2 ? "open" : ""
                 }`}
                 type="button"
-                onClick={() => toggleAccordion(29)}
+                onClick={() => toggleAccordion(2)}
               >
                 <i className="material-symbols-outlined transition-all text-gray-500 dark:text-gray-400 ltr:mr-[7px] rtl:ml-[7px] !text-[22px] leading-none relative -top-px">
                   settings
@@ -100,7 +200,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ toggleActive }) => {
 
               <div
                 className={`accordion-collapse ${
-                  openIndex === 29 ? "open" : "hidden"
+                  openIndex === 2 ? "open" : "hidden"
                 }`}
               >
                 <div className="pt-[4px]">

@@ -8,7 +8,6 @@ export interface Service {
   descriptionAr?: string;
   descriptionEn?: string;
   img: string;
-  displayOrder: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -20,7 +19,6 @@ export interface CreateServiceDto {
   title_en: string;
   description_ar?: string;
   description_en?: string;
-  display_order?: number;
   image: File;
 }
 
@@ -30,7 +28,6 @@ export interface UpdateServiceDto {
   title_en?: string;
   description_ar?: string;
   description_en?: string;
-  display_order?: number;
   is_active?: boolean;
   image?: File;
 }
@@ -107,9 +104,6 @@ export const createService = async (
   if (serviceData.description_en) {
     formData.append("description_en", serviceData.description_en);
   }
-  if (serviceData.display_order !== undefined) {
-    formData.append("display_order", serviceData.display_order.toString());
-  }
   formData.append("image", serviceData.image);
 
   const response = await fetch(`${API_URL}/api/services`, {
@@ -147,9 +141,6 @@ export const updateService = async (
   }
   if (serviceData.description_en !== undefined) {
     formData.append("description_en", serviceData.description_en);
-  }
-  if (serviceData.display_order !== undefined) {
-    formData.append("display_order", serviceData.display_order.toString());
   }
   if (serviceData.is_active !== undefined) {
     formData.append("is_active", serviceData.is_active.toString());

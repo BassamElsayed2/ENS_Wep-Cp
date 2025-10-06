@@ -4,22 +4,24 @@ import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import {
-  getPricings,
-  createPricing,
-  updatePricing,
-  deletePricing,
-  type Pricing,
-  type CreatePricingDto,
-  type UpdatePricingDto,
-} from "../../../services/apiPricings";
-import { SERVICE_PAGES } from "../../config/servicePages";
+  getDesignPricings,
+  createDesignPricing,
+  updateDesignPricing,
+  deleteDesignPricing,
+  type DesignPricing,
+  type CreateDesignPricingDto,
+  type UpdateDesignPricingDto,
+} from "../../../services/apiDesignPricings";
+import { DESIGN_SERVICE_PAGES } from "../../config/designServicePages";
 
-const PricingsManagement: React.FC = () => {
-  const [pricings, setPricings] = useState<Pricing[]>([]);
+const DesignPricingsManagement: React.FC = () => {
+  const [pricings, setPricings] = useState<DesignPricing[]>([]);
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [editingPricing, setEditingPricing] = useState<Pricing | null>(null);
+  const [editingPricing, setEditingPricing] = useState<DesignPricing | null>(
+    null
+  );
 
   // Form state
   const [formData, setFormData] = useState({
@@ -43,10 +45,10 @@ const PricingsManagement: React.FC = () => {
   const fetchPricings = async () => {
     setIsLoading(true);
     try {
-      const data = await getPricings(selectedPage);
+      const data = await getDesignPricings(selectedPage);
       setPricings(data);
     } catch (error) {
-      console.error("Error fetching pricings:", error);
+      console.error("Error fetching design pricings:", error);
       toast.error("حدث خطأ أثناء تحميل الأسعار");
     } finally {
       setIsLoading(false);
@@ -67,7 +69,7 @@ const PricingsManagement: React.FC = () => {
   };
 
   // Open modal for editing pricing
-  const handleOpenEditModal = (pricing: Pricing) => {
+  const handleOpenEditModal = (pricing: DesignPricing) => {
     setEditingPricing(pricing);
     setFormData({
       page_number: pricing.pageNumber,
@@ -100,7 +102,7 @@ const PricingsManagement: React.FC = () => {
     try {
       if (editingPricing) {
         // Update existing pricing
-        const updateData: UpdatePricingDto = {
+        const updateData: UpdateDesignPricingDto = {
           page_number: formData.page_number,
           title_ar: formData.title_ar,
           title_en: formData.title_en,
@@ -108,7 +110,7 @@ const PricingsManagement: React.FC = () => {
           items: formData.items,
         };
 
-        const updatedPricing = await updatePricing(
+        const updatedPricing = await updateDesignPricing(
           editingPricing.id,
           updateData
         );
@@ -118,7 +120,7 @@ const PricingsManagement: React.FC = () => {
         toast.success("تم تحديث السعر بنجاح");
       } else {
         // Create new pricing
-        const createData: CreatePricingDto = {
+        const createData: CreateDesignPricingDto = {
           page_number: formData.page_number,
           title_ar: formData.title_ar,
           title_en: formData.title_en,
@@ -126,7 +128,7 @@ const PricingsManagement: React.FC = () => {
           items: formData.items,
         };
 
-        const newPricing = await createPricing(createData);
+        const newPricing = await createDesignPricing(createData);
         setPricings([...pricings, newPricing]);
         toast.success("تمت إضافة السعر بنجاح");
       }
@@ -134,7 +136,7 @@ const PricingsManagement: React.FC = () => {
       setShowModal(false);
       fetchPricings();
     } catch (error) {
-      console.error("Error saving pricing:", error);
+      console.error("Error saving design pricing:", error);
       const errorMessage =
         error instanceof Error ? error.message : "حدث خطأ أثناء حفظ السعر";
       toast.error(errorMessage);
@@ -148,11 +150,11 @@ const PricingsManagement: React.FC = () => {
     }
 
     try {
-      await deletePricing(id);
+      await deleteDesignPricing(id);
       setPricings(pricings.filter((p) => p.id !== id));
       toast.success("تم حذف السعر بنجاح");
     } catch (error) {
-      console.error("Error deleting pricing:", error);
+      console.error("Error deleting design pricing:", error);
       const errorMessage =
         error instanceof Error ? error.message : "حدث خطأ أثناء حذف السعر";
       toast.error(errorMessage);
@@ -165,7 +167,7 @@ const PricingsManagement: React.FC = () => {
         <div className="trezo-card-header mb-[20px] md:mb-[25px] flex items-center justify-between">
           <div className="trezo-card-title">
             <h5 className="!mb-0 text-xl font-bold text-black dark:text-white">
-              إدارة الأسعار
+              إدارة أسعار خدمات التصميم
             </h5>
           </div>
           <button
@@ -179,7 +181,7 @@ const PricingsManagement: React.FC = () => {
         {/* Page Selection */}
         <div className="trezo-card-content">
           <div className="mb-[20px] flex gap-[10px] flex-wrap">
-            {SERVICE_PAGES.map((page) => (
+            {DESIGN_SERVICE_PAGES.map((page) => (
               <button
                 key={page.id}
                 onClick={() => setSelectedPage(page.id)}
@@ -308,7 +310,7 @@ const PricingsManagement: React.FC = () => {
                     {/* Page Number */}
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium mb-2 text-black dark:text-white">
-                        صفحة الخدمة
+                        صفحة خدمة التصميم
                       </label>
                       <select
                         value={formData.page_number}
@@ -320,7 +322,7 @@ const PricingsManagement: React.FC = () => {
                         }
                         className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
                       >
-                        {SERVICE_PAGES.map((page) => (
+                        {DESIGN_SERVICE_PAGES.map((page) => (
                           <option key={page.id} value={page.id}>
                             {page.nameAr} ({page.nameEn})
                           </option>
@@ -361,7 +363,7 @@ const PricingsManagement: React.FC = () => {
                     </div>
 
                     {/* Price */}
-                    <div>
+                    <div className="md:col-span-2">
                       <label className="block text-sm font-medium mb-2 text-black dark:text-white">
                         السعر *
                       </label>
@@ -482,4 +484,4 @@ const PricingsManagement: React.FC = () => {
   );
 };
 
-export default PricingsManagement;
+export default DesignPricingsManagement;
