@@ -1,0 +1,635 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import {
+  getPricings,
+  createPricing,
+  updatePricing,
+  deletePricing,
+  type Pricing,
+  type CreatePricingDto,
+  type UpdatePricingDto,
+} from "../../../services/apiPricings";
+import { SERVICE_PAGES } from "../../config/servicePages";
+
+const PricingsManagement: React.FC = () => {
+  const [pricings, setPricings] = useState<Pricing[]>([]);
+  const [selectedPage, setSelectedPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [editingPricing, setEditingPricing] = useState<Pricing | null>(null);
+
+  // Form state
+  const [formData, setFormData] = useState({
+    page_number: 1,
+    title_ar: "",
+    title_en: "",
+    subtitle_ar: "",
+    subtitle_en: "",
+    price: 0,
+    currency: "USD",
+    period_ar: "",
+    period_en: "",
+    features_ar: "",
+    features_en: "",
+    is_featured: false,
+    display_order: 0,
+  });
+
+  // Fetch pricings by page
+  useEffect(() => {
+    fetchPricings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPage]);
+
+  const fetchPricings = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getPricings(selectedPage);
+      setPricings(data);
+    } catch (error) {
+      console.error("Error fetching pricings:", error);
+      toast.error("حدث خطأ أثناء تحميل الأسعار");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Open modal for adding new pricing
+  const handleOpenAddModal = () => {
+    setEditingPricing(null);
+    setFormData({
+      page_number: selectedPage,
+      title_ar: "",
+      title_en: "",
+      subtitle_ar: "",
+      subtitle_en: "",
+      price: 0,
+      currency: "USD",
+      period_ar: "",
+      period_en: "",
+      features_ar: "",
+      features_en: "",
+      is_featured: false,
+      display_order: 0,
+    });
+    setShowModal(true);
+  };
+
+  // Open modal for editing pricing
+  const handleOpenEditModal = (pricing: Pricing) => {
+    setEditingPricing(pricing);
+    setFormData({
+      page_number: pricing.pageNumber,
+      title_ar: pricing.titleAr,
+      title_en: pricing.titleEn,
+      subtitle_ar: pricing.subtitleAr || "",
+      subtitle_en: pricing.subtitleEn || "",
+      price: pricing.price,
+      currency: pricing.currency,
+      period_ar: pricing.periodAr || "",
+      period_en: pricing.periodEn || "",
+      features_ar: pricing.featuresAr || "",
+      features_en: pricing.featuresEn || "",
+      is_featured: pricing.isFeatured,
+      display_order: pricing.displayOrder,
+    });
+    setShowModal(true);
+  };
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    // Validation
+    if (!formData.title_ar || !formData.title_en) {
+      toast.error("الرجاء إدخال العنوان بالعربية والإنجليزية");
+      return;
+    }
+
+    if (formData.price <= 0) {
+      toast.error("الرجاء إدخال سعر صحيح");
+      return;
+    }
+
+    try {
+      if (editingPricing) {
+        // Update existing pricing
+        const updateData: UpdatePricingDto = {
+          page_number: formData.page_number,
+          title_ar: formData.title_ar,
+          title_en: formData.title_en,
+          subtitle_ar: formData.subtitle_ar,
+          subtitle_en: formData.subtitle_en,
+          price: formData.price,
+          currency: formData.currency,
+          period_ar: formData.period_ar,
+          period_en: formData.period_en,
+          features_ar: formData.features_ar,
+          features_en: formData.features_en,
+          is_featured: formData.is_featured,
+          display_order: formData.display_order,
+        };
+
+        const updatedPricing = await updatePricing(
+          editingPricing.id,
+          updateData
+        );
+        setPricings(
+          pricings.map((p) => (p.id === editingPricing.id ? updatedPricing : p))
+        );
+        toast.success("تم تحديث السعر بنجاح");
+      } else {
+        // Create new pricing
+        const createData: CreatePricingDto = {
+          page_number: formData.page_number,
+          title_ar: formData.title_ar,
+          title_en: formData.title_en,
+          subtitle_ar: formData.subtitle_ar,
+          subtitle_en: formData.subtitle_en,
+          price: formData.price,
+          currency: formData.currency,
+          period_ar: formData.period_ar,
+          period_en: formData.period_en,
+          features_ar: formData.features_ar,
+          features_en: formData.features_en,
+          is_featured: formData.is_featured,
+          display_order: formData.display_order,
+        };
+
+        const newPricing = await createPricing(createData);
+        setPricings([...pricings, newPricing]);
+        toast.success("تمت إضافة السعر بنجاح");
+      }
+
+      setShowModal(false);
+      fetchPricings();
+    } catch (error) {
+      console.error("Error saving pricing:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "حدث خطأ أثناء حفظ السعر";
+      toast.error(errorMessage);
+    }
+  };
+
+  // Handle delete pricing
+  const handleDelete = async (id: number) => {
+    if (!confirm("هل أنت متأكد من حذف هذا السعر؟")) {
+      return;
+    }
+
+    try {
+      await deletePricing(id);
+      setPricings(pricings.filter((p) => p.id !== id));
+      toast.success("تم حذف السعر بنجاح");
+    } catch (error) {
+      console.error("Error deleting pricing:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "حدث خطأ أثناء حذف السعر";
+      toast.error(errorMessage);
+    }
+  };
+
+  return (
+    <>
+      <div className="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+        <div className="trezo-card-header mb-[20px] md:mb-[25px] flex items-center justify-between">
+          <div className="trezo-card-title">
+            <h5 className="!mb-0 text-xl font-bold text-black dark:text-white">
+              إدارة الأسعار
+            </h5>
+          </div>
+          <button
+            onClick={handleOpenAddModal}
+            className="inline-block py-[10px] px-[30px] bg-primary-500 text-white transition-all hover:bg-primary-600 rounded-md border border-primary-500 hover:border-primary-600"
+          >
+            إضافة سعر جديد
+          </button>
+        </div>
+
+        {/* Page Selection */}
+        <div className="trezo-card-content">
+          <div className="mb-[20px] flex gap-[10px] flex-wrap">
+            {SERVICE_PAGES.map((page) => (
+              <button
+                key={page.id}
+                onClick={() => setSelectedPage(page.id)}
+                className={`px-[20px] py-[12px] rounded-md transition-all border ${
+                  selectedPage === page.id
+                    ? "bg-primary-500 text-white border-primary-500"
+                    : "bg-gray-100 dark:bg-[#15203c] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-[#172036] hover:bg-primary-100 dark:hover:bg-[#1a2841]"
+                }`}
+              >
+                <div className="font-semibold">{page.nameAr}</div>
+                <div className="text-xs opacity-75">{page.nameEn}</div>
+              </button>
+            ))}
+          </div>
+
+          {/* Pricings Grid */}
+          {isLoading ? (
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              جاري التحميل...
+            </div>
+          ) : pricings.length === 0 ? (
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              لا توجد أسعار في هذه الصفحة
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] md:gap-[25px]">
+              {pricings.map((pricing) => (
+                <div
+                  key={pricing.id}
+                  className={`bg-white dark:bg-[#0c1427] rounded-md shadow-md overflow-hidden border-2 transition-all hover:shadow-lg ${
+                    pricing.isFeatured
+                      ? "border-primary-500"
+                      : "border-gray-200 dark:border-[#172036]"
+                  }`}
+                >
+                  <div className="p-[20px] md:p-[25px]">
+                    {pricing.isFeatured && (
+                      <div className="bg-primary-500 text-white text-xs font-bold px-[10px] py-[5px] rounded mb-[15px] inline-block">
+                        مميز ⭐
+                      </div>
+                    )}
+                    <h3 className="text-xl font-bold mb-[10px] text-black dark:text-white">
+                      {pricing.titleAr}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-[10px]">
+                      {pricing.titleEn}
+                    </p>
+
+                    {pricing.subtitleAr && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-[15px]">
+                        {pricing.subtitleAr}
+                      </p>
+                    )}
+
+                    <div className="mb-[20px] py-[15px] border-t border-b border-gray-200 dark:border-[#172036]">
+                      <span className="text-3xl font-bold text-primary-500">
+                        {pricing.price}
+                      </span>
+                      <span className="text-lg text-gray-600 dark:text-gray-400 mr-2">
+                        {pricing.currency}
+                      </span>
+                      {pricing.periodAr && (
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          / {pricing.periodAr}
+                        </span>
+                      )}
+                    </div>
+
+                    {pricing.featuresAr && (
+                      <div className="mb-[15px]">
+                        <p className="text-sm font-semibold mb-[10px] text-black dark:text-white">
+                          المميزات:
+                        </p>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                          {pricing.featuresAr}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="text-xs text-gray-400 mb-[15px]">
+                      الترتيب: {pricing.displayOrder}
+                    </div>
+
+                    <div className="flex gap-[10px]">
+                      <button
+                        onClick={() => handleOpenEditModal(pricing)}
+                        className="flex-1 bg-warning-500 hover:bg-warning-600 text-white px-[15px] py-[10px] rounded-md text-sm transition-all"
+                      >
+                        تعديل
+                      </button>
+                      <button
+                        onClick={() => handleDelete(pricing.id)}
+                        className="flex-1 bg-danger-500 hover:bg-danger-600 text-white px-[15px] py-[10px] rounded-md text-sm transition-all"
+                      >
+                        حذف
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Modal */}
+      <Dialog
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        className="relative z-50"
+      >
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+        />
+
+        <div className="fixed inset-0 z-50 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <DialogPanel
+              transition
+              className="relative transform overflow-hidden rounded-lg bg-white dark:bg-[#0c1427] text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-3xl data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
+            >
+              <div className="trezo-card w-full bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md max-h-[85vh] overflow-y-auto">
+                <div className="trezo-card-header bg-gray-50 dark:bg-[#15203c] mb-[20px] md:mb-[25px] flex items-center justify-between -mx-[20px] md:-mx-[25px] -mt-[20px] md:-mt-[25px] p-[20px] md:p-[25px] rounded-t-md">
+                  <div className="trezo-card-title">
+                    <h5 className="!mb-0 text-xl font-bold text-black dark:text-white">
+                      {editingPricing ? "تعديل السعر" : "إضافة سعر جديد"}
+                    </h5>
+                  </div>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="trezo-card-content">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-[15px] md:gap-[20px]">
+                    {/* Page Number */}
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        صفحة الخدمة
+                      </label>
+                      <select
+                        value={formData.page_number}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            page_number: parseInt(e.target.value),
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                      >
+                        {SERVICE_PAGES.map((page) => (
+                          <option key={page.id} value={page.id}>
+                            {page.nameAr} ({page.nameEn})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Title Arabic */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        العنوان (عربي) *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.title_ar}
+                        onChange={(e) =>
+                          setFormData({ ...formData, title_ar: e.target.value })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        placeholder="أدخل العنوان بالعربية"
+                      />
+                    </div>
+
+                    {/* Title English */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        العنوان (إنجليزي) *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.title_en}
+                        onChange={(e) =>
+                          setFormData({ ...formData, title_en: e.target.value })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        placeholder="Enter title in English"
+                      />
+                    </div>
+
+                    {/* Subtitle Arabic */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        العنوان الفرعي (عربي)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.subtitle_ar}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            subtitle_ar: e.target.value,
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        placeholder="أدخل العنوان الفرعي بالعربية"
+                      />
+                    </div>
+
+                    {/* Subtitle English */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        العنوان الفرعي (إنجليزي)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.subtitle_en}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            subtitle_en: e.target.value,
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        placeholder="Enter subtitle in English"
+                      />
+                    </div>
+
+                    {/* Price */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        السعر *
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={formData.price}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            price: parseFloat(e.target.value) || 0,
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                      />
+                    </div>
+
+                    {/* Currency */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        العملة
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.currency}
+                        onChange={(e) =>
+                          setFormData({ ...formData, currency: e.target.value })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        placeholder="USD, EUR, SAR..."
+                      />
+                    </div>
+
+                    {/* Period Arabic */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        الفترة (عربي)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.period_ar}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            period_ar: e.target.value,
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        placeholder="شهرياً، سنوياً..."
+                      />
+                    </div>
+
+                    {/* Period English */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        الفترة (إنجليزي)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.period_en}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            period_en: e.target.value,
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        placeholder="monthly, yearly..."
+                      />
+                    </div>
+
+                    {/* Features Arabic */}
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        المميزات (عربي)
+                      </label>
+                      <textarea
+                        value={formData.features_ar}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            features_ar: e.target.value,
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        rows={3}
+                        placeholder='مثال: ["ميزة 1", "ميزة 2", "ميزة 3"] أو نص عادي'
+                      />
+                    </div>
+
+                    {/* Features English */}
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        المميزات (إنجليزي)
+                      </label>
+                      <textarea
+                        value={formData.features_en}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            features_en: e.target.value,
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                        rows={3}
+                        placeholder='Example: ["Feature 1", "Feature 2", "Feature 3"] or plain text'
+                      />
+                    </div>
+
+                    {/* Display Order */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-black dark:text-white">
+                        ترتيب العرض
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.display_order}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            display_order: parseInt(e.target.value) || 0,
+                          })
+                        }
+                        className="w-full border border-gray-300 dark:border-[#172036] rounded-md px-[15px] py-[10px] bg-white dark:bg-[#0c1427] text-black dark:text-white focus:outline-none focus:border-primary-500"
+                      />
+                    </div>
+
+                    {/* Is Featured */}
+                    <div className="flex items-center pt-8">
+                      <input
+                        type="checkbox"
+                        id="is_featured"
+                        checked={formData.is_featured}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            is_featured: e.target.checked,
+                          })
+                        }
+                        className="w-4 h-4 text-primary-600 border-gray-300 dark:border-[#172036] rounded focus:ring-primary-500"
+                      />
+                      <label
+                        htmlFor="is_featured"
+                        className="mr-2 text-sm font-medium text-black dark:text-white"
+                      >
+                        خطة مميزة ⭐
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-[15px] mt-[25px] pt-[25px] border-t border-gray-200 dark:border-[#172036]">
+                    <button
+                      onClick={handleSubmit}
+                      className="flex-1 inline-block py-[10px] px-[30px] bg-primary-500 text-white transition-all hover:bg-primary-600 rounded-md border border-primary-500 hover:border-primary-600"
+                    >
+                      {editingPricing ? "تحديث" : "إضافة"}
+                    </button>
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="flex-1 inline-block py-[10px] px-[30px] bg-gray-300 dark:bg-[#15203c] text-gray-700 dark:text-gray-300 transition-all hover:bg-gray-400 dark:hover:bg-[#1a2841] rounded-md border border-gray-300 dark:border-[#172036]"
+                    >
+                      إلغاء
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
+    </>
+  );
+};
+
+export default PricingsManagement;
