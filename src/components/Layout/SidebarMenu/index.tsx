@@ -166,6 +166,159 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ toggleActive }) => {
               </div>
             </div>
 
+            <div className="accordion-item rounded-md text-black dark:text-white mb-[5px] whitespace-nowrap">
+              <button
+                className={`accordion-button toggle flex items-center transition-all py-[9px] ltr:pl-[14px] ltr:pr-[30px] rtl:pr-[14px] rtl:pl-[30px] rounded-md font-medium w-full relative hover:bg-gray-50 text-left dark:hover:bg-[#15203c] ${
+                  openIndex === 4 ? "open" : ""
+                }`}
+                type="button"
+                onClick={() => toggleAccordion(4)}
+              >
+                <i className="ri-code-box-line transition-all text-gray-500 dark:text-gray-400 ltr:mr-[7px] rtl:ml-[7px] !text-[20px] leading-none relative -top-px"></i>
+                <span className="title leading-none">البرمجة والتطوير</span>
+              </button>
+
+              <div
+                className={`accordion-collapse ${
+                  openIndex === 4 ? "open" : "hidden"
+                }`}
+              >
+                <div className="pt-[4px]">
+                  <ul className="sidebar-sub-menu">
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/development-services"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/development-services"
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <i className="ri-code-s-slash-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة خدمات البرمجة
+                      </Link>
+                    </li>
+
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/development-pricings"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/development-pricings"
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <i className="ri-price-tag-3-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة أسعار البرمجة
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="accordion-item rounded-md text-black dark:text-white mb-[5px] whitespace-nowrap">
+              <button
+                className={`accordion-button toggle flex items-center transition-all py-[9px] ltr:pl-[14px] ltr:pr-[30px] rtl:pr-[14px] rtl:pl-[30px] rounded-md font-medium w-full relative hover:bg-gray-50 text-left dark:hover:bg-[#15203c] ${
+                  openIndex === 5 ? "open" : ""
+                }`}
+                type="button"
+                onClick={() => toggleAccordion(5)}
+              >
+                <i className="ri-customer-service-2-line transition-all text-gray-500 dark:text-gray-400 ltr:mr-[7px] rtl:ml-[7px] !text-[20px] leading-none relative -top-px"></i>
+                <span className="title leading-none">خدمات الدعم الفني</span>
+              </button>
+
+              <div
+                className={`accordion-collapse ${
+                  openIndex === 5 ? "open" : "hidden"
+                }`}
+              >
+                <div className="pt-[4px]">
+                  <ul className="sidebar-sub-menu">
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/support-services"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/support-services"
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <i className="ri-tools-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة خدمات الدعم
+                      </Link>
+                    </li>
+
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/support-pricings"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/support-pricings"
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <i className="ri-price-tag-3-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة أسعار الدعم
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="accordion-item rounded-md text-black dark:text-white mb-[5px] whitespace-nowrap">
+              <button
+                className={`accordion-button toggle flex items-center transition-all py-[9px] ltr:pl-[14px] ltr:pr-[30px] rtl:pr-[14px] rtl:pl-[30px] rounded-md font-medium w-full relative hover:bg-gray-50 text-left dark:hover:bg-[#15203c] ${
+                  openIndex === 6 ? "open" : ""
+                }`}
+                type="button"
+                onClick={() => toggleAccordion(6)}
+              >
+                <i className="ri-smartphone-line transition-all text-gray-500 dark:text-gray-400 ltr:mr-[7px] rtl:ml-[7px] !text-[20px] leading-none relative -top-px"></i>
+                <span className="title leading-none">الإصدارات البرمجية</span>
+              </button>
+
+              <div
+                className={`accordion-collapse ${
+                  openIndex === 6 ? "open" : "hidden"
+                }`}
+              >
+                <div className="pt-[4px]">
+                  <ul className="sidebar-sub-menu">
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/app-version-services"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/app-version-services"
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <i className="ri-app-store-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة الإصدارات
+                      </Link>
+                    </li>
+
+                    <li className="sidemenu-item mb-[4px] last:mb-0">
+                      <Link
+                        href="/dashboard/app-version-pricings"
+                        className={`sidemenu-link rounded-md flex items-center relative transition-all font-medium text-gray-500 dark:text-gray-400 py-[9px] ltr:pl-[38px] ltr:pr-[30px] rtl:pr-[38px] rtl:pl-[30px] hover:text-primary-500 hover:bg-primary-50 w-full text-left dark:hover:bg-[#15203c] ${
+                          pathname === "/dashboard/app-version-pricings"
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <i className="ri-price-tag-3-line ltr:mr-[7px] rtl:ml-[7px] !text-[18px] leading-none relative -top-px"></i>
+                        إدارة الأسعار
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
             <span className="block relative font-medium uppercase text-gray-400 mb-[8px] text-xs [&:not(:first-child)]:mt-[22px]">
               أخري
             </span>
