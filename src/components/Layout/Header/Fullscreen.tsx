@@ -15,11 +15,8 @@ const Fullscreen: React.FC = () => {
         setIsFullscreen(false);
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-          `Error toggling full-screen mode: ${err.message} (${err.name})`
-        );
-      } else {
-      }
+      // Error handling removed
+      console.log(err);
     }
   };
 
@@ -32,9 +29,7 @@ const Fullscreen: React.FC = () => {
           onClick={handleToggleFullscreen}
           aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
         >
-          <i
-            className="material-symbols-outlined !text-[22px] md:!text-[24px]" 
-          >
+          <i className="material-symbols-outlined !text-[22px] md:!text-[24px]">
             {isFullscreen ? "fullscreen_exit" : "fullscreen"}
           </i>
         </button>

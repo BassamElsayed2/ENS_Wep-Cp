@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpSchema } from "@/components/Social/SettingsForm/lib/validations/schema";
+import { signUpSchema } from "@/lib/validations/auth";
 import { z } from "zod";
 
 import { useCreateUser } from "@/hooks/useCreateUser";

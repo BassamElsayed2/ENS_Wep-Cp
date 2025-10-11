@@ -70,7 +70,7 @@ const DesignServicesManagement: React.FC = () => {
     try {
       const data = await getDesignServices(selectedPage);
       setServices(data);
-    } catch (e) {
+    } catch (error: unknown) {
       toast.error("حدث خطأ أثناء تحميل خدمات التصميم");
     } finally {
       setIsLoading(false);
@@ -163,10 +163,10 @@ const DesignServicesManagement: React.FC = () => {
       }
       setShowModal(false);
       fetchServices();
-    } catch (e) {
+    } catch (error: unknown) {
       toast.dismiss(loadingToast);
       const msg =
-        e instanceof Error ? e.message : "حدث خطأ أثناء حفظ خدمة التصميم";
+        error instanceof Error ? error.message : "حدث خطأ أثناء حفظ خدمة التصميم";
       toast.error(msg);
     }
   };
@@ -177,9 +177,9 @@ const DesignServicesManagement: React.FC = () => {
       await deleteDesignService(id);
       setServices(services.filter((s) => s.id !== id));
       toast.success("تم حذف خدمة التصميم بنجاح");
-    } catch (e) {
+    } catch (error: unknown) {
       const msg =
-        e instanceof Error ? e.message : "حدث خطأ أثناء حذف خدمة التصميم";
+        error instanceof Error ? error.message : "حدث خطأ أثناء حذف خدمة التصميم";
       toast.error(msg);
     }
   };

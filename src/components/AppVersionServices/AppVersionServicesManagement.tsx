@@ -69,7 +69,7 @@ const AppVersionServicesManagement: React.FC = () => {
     try {
       const data = await getAppVersionServices(selectedPage);
       setServices(data);
-    } catch (e) {
+    } catch (error: unknown) {
       toast.error("حدث خطأ أثناء تحميل الإصدارات البرمجية");
     } finally {
       setIsLoading(false);
@@ -164,10 +164,10 @@ const AppVersionServicesManagement: React.FC = () => {
       }
       setShowModal(false);
       fetchServices();
-    } catch (e) {
+    } catch (error: unknown) {
       toast.dismiss(loadingToast);
       const msg =
-        e instanceof Error ? e.message : "حدث خطأ أثناء حفظ الإصدار البرمجي";
+        error instanceof Error ? error.message : "حدث خطأ أثناء حفظ الإصدار البرمجي";
       toast.error(msg);
     }
   };
@@ -178,9 +178,9 @@ const AppVersionServicesManagement: React.FC = () => {
       await deleteAppVersionService(id);
       setServices(services.filter((s) => s.id !== id));
       toast.success("تم حذف الإصدار البرمجي بنجاح");
-    } catch (e) {
+    } catch (error: unknown) {
       const msg =
-        e instanceof Error ? e.message : "حدث خطأ أثناء حذف الإصدار البرمجي";
+        error instanceof Error ? error.message : "حدث خطأ أثناء حذف الإصدار البرمجي";
       toast.error(msg);
     }
   };

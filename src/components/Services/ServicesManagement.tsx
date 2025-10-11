@@ -169,14 +169,6 @@ const ServicesManagement: React.FC = () => {
         toast.success("تم تحديث الخدمة بنجاح");
       } else {
         // Create new service
-          page_number: formData.page_number,
-          title_ar: formData.title_ar,
-          title_en: formData.title_en,
-          image_name: selectedImage?.name,
-          image_size: selectedImage?.size,
-          image_type: selectedImage?.type,
-        });
-
         const createData: CreateServiceDto = {
           page_number: formData.page_number,
           title_ar: formData.title_ar,

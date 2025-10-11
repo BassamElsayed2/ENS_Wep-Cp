@@ -21,10 +21,10 @@ export function useUpdateUser() {
       id: string;
       userData: Partial<CreateUserData>;
     }) => updateUser(id, userData),
-    onSuccess: (data) => {
+    onSuccess: (_, variables) => {
       // تحديث الـ cache
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.invalidateQueries({ queryKey: ["user", data.id] });
+      queryClient.invalidateQueries({ queryKey: ["user", variables.id] });
 
       toast.success("تم تحديث البيانات بنجاح");
     },

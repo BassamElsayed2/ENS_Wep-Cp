@@ -39,7 +39,7 @@ export function useSignIn() {
         throw new Error("فشل في الحصول على بيانات المستخدم");
       }
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("فشل تسجيل الدخول. تحقق من البريد الإلكتروني وكلمة المرور");
     },
   });

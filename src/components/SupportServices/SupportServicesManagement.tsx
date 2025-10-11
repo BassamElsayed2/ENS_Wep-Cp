@@ -70,7 +70,7 @@ const SupportServicesManagement: React.FC = () => {
     try {
       const data = await getSupportServices(selectedPage);
       setServices(data);
-    } catch (e) {
+    } catch (error: unknown) {
       toast.error("حدث خطأ أثناء تحميل خدمات الدعم الفني");
     } finally {
       setIsLoading(false);
@@ -165,10 +165,10 @@ const SupportServicesManagement: React.FC = () => {
       }
       setShowModal(false);
       fetchServices();
-    } catch (e) {
+    } catch (error: unknown) {
       toast.dismiss(loadingToast);
       const msg =
-        e instanceof Error ? e.message : "حدث خطأ أثناء حفظ خدمة الدعم الفني";
+        error instanceof Error ? error.message : "حدث خطأ أثناء حفظ خدمة الدعم الفني";
       toast.error(msg);
     }
   };
@@ -179,9 +179,9 @@ const SupportServicesManagement: React.FC = () => {
       await deleteSupportService(id);
       setServices(services.filter((s) => s.id !== id));
       toast.success("تم حذف خدمة الدعم الفني بنجاح");
-    } catch (e) {
+    } catch (error: unknown) {
       const msg =
-        e instanceof Error ? e.message : "حدث خطأ أثناء حذف خدمة الدعم الفني";
+        error instanceof Error ? error.message : "حدث خطأ أثناء حذف خدمة الدعم الفني";
       toast.error(msg);
     }
   };

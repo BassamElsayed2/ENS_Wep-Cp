@@ -40,7 +40,7 @@ const BrandsTable: React.FC = () => {
           setBrands([]);
           toast.error("تنسيق البيانات غير صحيح");
         }
-      } catch (error) {
+      } catch (error: unknown) {
         setBrands([]); // Set empty array on error
         toast.error("حدث خطأ أثناء تحميل البيانات");
       } finally {
@@ -113,7 +113,7 @@ const BrandsTable: React.FC = () => {
         const error = await response.json();
         toast.error(error.error || "حدث خطأ أثناء إضافة الشعار");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error("حدث خطأ أثناء إضافة الشعار");
     }
   };
@@ -155,7 +155,7 @@ const BrandsTable: React.FC = () => {
         const error = await response.json();
         toast.error(error.error || "حدث خطأ أثناء تحديث الشعار");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error("حدث خطأ أثناء تحديث الشعار");
     }
   };
@@ -177,7 +177,7 @@ const BrandsTable: React.FC = () => {
         } else {
           toast.error("حدث خطأ أثناء حذف الشعار");
         }
-      } catch (error) {
+      } catch (error: unknown) {
         toast.error("حدث خطأ أثناء حذف الشعار");
       }
     }

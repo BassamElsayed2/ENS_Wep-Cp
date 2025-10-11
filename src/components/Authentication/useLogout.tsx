@@ -12,8 +12,7 @@ export function useLogout() {
       queryClient.removeQueries();
       router.replace("/");
     },
-    onError: (error) => {
-    },
+    onError: () => {},
   });
 
   return {

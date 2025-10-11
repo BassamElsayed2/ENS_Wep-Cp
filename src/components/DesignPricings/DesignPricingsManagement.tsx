@@ -47,7 +47,7 @@ const DesignPricingsManagement: React.FC = () => {
     try {
       const data = await getDesignPricings(selectedPage);
       setPricings(data);
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error("حدث خطأ أثناء تحميل الأسعار");
     } finally {
       setIsLoading(false);
@@ -134,7 +134,7 @@ const DesignPricingsManagement: React.FC = () => {
 
       setShowModal(false);
       fetchPricings();
-    } catch (error) {
+    } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "حدث خطأ أثناء حفظ السعر";
       toast.error(errorMessage);
@@ -151,7 +151,7 @@ const DesignPricingsManagement: React.FC = () => {
       await deleteDesignPricing(id);
       setPricings(pricings.filter((p) => p.id !== id));
       toast.success("تم حذف السعر بنجاح");
-    } catch (error) {
+    } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "حدث خطأ أثناء حذف السعر";
       toast.error(errorMessage);

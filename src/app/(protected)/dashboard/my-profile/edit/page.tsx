@@ -1,5 +1,5 @@
 import Nav from "@/components/Settings/Nav";
-import SettingsForm from "@/components/Social/SettingsForm";
+import SettingsForm from "@/components/Settings/SettingsForm";
 import Link from "next/link";
 
 export default function Page() {

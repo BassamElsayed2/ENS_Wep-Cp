@@ -69,7 +69,7 @@ const DevelopmentServicesManagement: React.FC = () => {
     try {
       const data = await getDevelopmentServices(selectedPage);
       setServices(data);
-    } catch (e) {
+    } catch (error: unknown) {
       toast.error("حدث خطأ أثناء تحميل خدمات البرمجة والتطوير");
     } finally {
       setIsLoading(false);
@@ -164,11 +164,11 @@ const DevelopmentServicesManagement: React.FC = () => {
       }
       setShowModal(false);
       fetchServices();
-    } catch (e) {
+    } catch (error: unknown) {
       toast.dismiss(loadingToast);
       const msg =
-        e instanceof Error
-          ? e.message
+        error instanceof Error
+          ? error.message
           : "حدث خطأ أثناء حفظ خدمة البرمجة والتطوير";
       toast.error(msg);
     }
@@ -180,10 +180,10 @@ const DevelopmentServicesManagement: React.FC = () => {
       await deleteDevelopmentService(id);
       setServices(services.filter((s) => s.id !== id));
       toast.success("تم حذف خدمة البرمجة والتطوير بنجاح");
-    } catch (e) {
+    } catch (error: unknown) {
       const msg =
-        e instanceof Error
-          ? e.message
+        error instanceof Error
+          ? error.message
           : "حدث خطأ أثناء حذف خدمة البرمجة والتطوير";
       toast.error(msg);
     }
