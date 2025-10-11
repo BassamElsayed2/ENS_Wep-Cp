@@ -22,7 +22,6 @@ const ClientRatings: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // Dynamic ratings data

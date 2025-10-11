@@ -40,7 +40,6 @@ export function useSignIn() {
       }
     },
     onError: (error) => {
-      console.error("Login failed:", error);
       toast.error("فشل تسجيل الدخول. تحقق من البريد الإلكتروني وكلمة المرور");
     },
   });

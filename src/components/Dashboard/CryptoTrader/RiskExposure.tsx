@@ -14,7 +14,6 @@ const RiskExposure: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // Chart

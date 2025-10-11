@@ -30,7 +30,6 @@ export function useCreateUser() {
     onError: (error: Error) => {
       // إظهار رسالة خطأ
       toast.error(error.message || "فشل في إنشاء المستخدم");
-      console.error("Failed to create user:", error);
     },
   });
 

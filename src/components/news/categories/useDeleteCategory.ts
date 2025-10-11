@@ -29,7 +29,6 @@ export function useDeleteCategory() {
             .remove([fileName]);
 
           if (deleteImageError) {
-            console.error("Error deleting image:", deleteImageError);
             // Continue with category deletion even if image deletion fails
           }
         }

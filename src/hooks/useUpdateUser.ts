@@ -30,7 +30,6 @@ export function useUpdateUser() {
     },
     onError: (error: Error) => {
       toast.error(error.message || "فشل في تحديث البيانات");
-      console.error("Failed to update user:", error);
     },
   });
 

@@ -16,11 +16,9 @@ const Fullscreen: React.FC = () => {
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error(
           `Error toggling full-screen mode: ${err.message} (${err.name})`
         );
       } else {
-        console.error("Unknown error occurred while toggling full-screen mode.");
       }
     }
   };

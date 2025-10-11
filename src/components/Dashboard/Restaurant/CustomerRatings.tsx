@@ -21,7 +21,6 @@ const CustomerRatings: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`); // Add your logic here
   };
 
   // Sample data - in a real app, this would come from an API

@@ -71,7 +71,6 @@ const DesignServicesManagement: React.FC = () => {
       const data = await getDesignServices(selectedPage);
       setServices(data);
     } catch (e) {
-      console.error(e);
       toast.error("حدث خطأ أثناء تحميل خدمات التصميم");
     } finally {
       setIsLoading(false);

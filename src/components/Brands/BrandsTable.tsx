@@ -37,12 +37,10 @@ const BrandsTable: React.FC = () => {
           // In case API returns { success: true, data: [...] }
           setBrands(data.data);
         } else {
-          console.error("Unexpected data format:", data);
           setBrands([]);
           toast.error("تنسيق البيانات غير صحيح");
         }
       } catch (error) {
-        console.error("Error fetching brands:", error);
         setBrands([]); // Set empty array on error
         toast.error("حدث خطأ أثناء تحميل البيانات");
       } finally {
@@ -116,7 +114,6 @@ const BrandsTable: React.FC = () => {
         toast.error(error.error || "حدث خطأ أثناء إضافة الشعار");
       }
     } catch (error) {
-      console.error("Error adding brand:", error);
       toast.error("حدث خطأ أثناء إضافة الشعار");
     }
   };
@@ -159,7 +156,6 @@ const BrandsTable: React.FC = () => {
         toast.error(error.error || "حدث خطأ أثناء تحديث الشعار");
       }
     } catch (error) {
-      console.error("Error updating brand:", error);
       toast.error("حدث خطأ أثناء تحديث الشعار");
     }
   };
@@ -182,7 +178,6 @@ const BrandsTable: React.FC = () => {
           toast.error("حدث خطأ أثناء حذف الشعار");
         }
       } catch (error) {
-        console.error("Error deleting brand:", error);
         toast.error("حدث خطأ أثناء حذف الشعار");
       }
     }

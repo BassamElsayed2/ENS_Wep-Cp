@@ -47,7 +47,6 @@ const AppVersionPricingsManagement: React.FC = () => {
       const data = await getAppVersionPricings(selectedPage);
       setPricings(data);
     } catch (error) {
-      console.error("Error fetching app version pricings:", error);
       toast.error("حدث خطأ أثناء تحميل أسعار الإصدارات البرمجية");
     } finally {
       setIsLoading(false);
@@ -135,7 +134,6 @@ const AppVersionPricingsManagement: React.FC = () => {
       setShowModal(false);
       fetchPricings();
     } catch (error) {
-      console.error("Error saving app version pricing:", error);
       const errorMessage =
         error instanceof Error ? error.message : "حدث خطأ أثناء حفظ السعر";
       toast.error(errorMessage);
@@ -153,7 +151,6 @@ const AppVersionPricingsManagement: React.FC = () => {
       setPricings(pricings.filter((p) => p.id !== id));
       toast.success("تم حذف السعر بنجاح");
     } catch (error) {
-      console.error("Error deleting app version pricing:", error);
       const errorMessage =
         error instanceof Error ? error.message : "حدث خطأ أثناء حذف السعر";
       toast.error(errorMessage);

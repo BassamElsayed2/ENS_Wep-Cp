@@ -80,7 +80,6 @@ const TopPerformers: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`); // Add your logic here
   };
 
   // Table

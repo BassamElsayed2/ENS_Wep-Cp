@@ -192,7 +192,6 @@ const LatestTransactions: React.FC = () => {
   // Handle option selection
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`); // Add your logic here
   };
 
   // Pagination logic

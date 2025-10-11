@@ -70,7 +70,6 @@ const DevelopmentServicesManagement: React.FC = () => {
       const data = await getDevelopmentServices(selectedPage);
       setServices(data);
     } catch (e) {
-      console.error(e);
       toast.error("حدث خطأ أثناء تحميل خدمات البرمجة والتطوير");
     } finally {
       setIsLoading(false);

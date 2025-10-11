@@ -70,7 +70,6 @@ const AppVersionServicesManagement: React.FC = () => {
       const data = await getAppVersionServices(selectedPage);
       setServices(data);
     } catch (e) {
-      console.error(e);
       toast.error("حدث خطأ أثناء تحميل الإصدارات البرمجية");
     } finally {
       setIsLoading(false);

@@ -71,7 +71,6 @@ const SupportServicesManagement: React.FC = () => {
       const data = await getSupportServices(selectedPage);
       setServices(data);
     } catch (e) {
-      console.error(e);
       toast.error("حدث خطأ أثناء تحميل خدمات الدعم الفني");
     } finally {
       setIsLoading(false);

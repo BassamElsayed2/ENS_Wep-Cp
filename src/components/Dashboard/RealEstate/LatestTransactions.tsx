@@ -117,7 +117,6 @@ const LatestTransactions: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // Handle row deletion

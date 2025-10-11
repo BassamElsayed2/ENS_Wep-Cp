@@ -73,7 +73,6 @@ const MyTasks: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   const totalPages = Math.ceil(tasks.length / ITEMS_PER_PAGE);

@@ -10,7 +10,6 @@ const RecentSales: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`); // Add your logic here
   };
 
   // Dynamic sales data

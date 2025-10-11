@@ -118,7 +118,6 @@ const GroupLessons: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected time period: ${option}`);
   };
 
   return (

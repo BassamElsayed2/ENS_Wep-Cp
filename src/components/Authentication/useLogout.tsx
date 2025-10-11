@@ -13,7 +13,6 @@ export function useLogout() {
       router.replace("/");
     },
     onError: (error) => {
-      console.error("Logout failed:", error);
     },
   });
 

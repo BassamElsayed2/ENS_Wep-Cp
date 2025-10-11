@@ -117,7 +117,6 @@ const RecentLeads: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {

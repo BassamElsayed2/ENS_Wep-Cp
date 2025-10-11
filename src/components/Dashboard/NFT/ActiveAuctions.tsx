@@ -158,7 +158,6 @@ const ActiveAuctions: React.FC = () => {
   // Handle dropdown selection
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // Handle pagination

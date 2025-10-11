@@ -76,7 +76,6 @@ const ServicesManagement: React.FC = () => {
       const data = await getServices(selectedPage);
       setServices(data);
     } catch (error) {
-      console.error("Error fetching services:", error);
       toast.error("حدث خطأ أثناء تحميل الخدمات");
     } finally {
       setIsLoading(false);
@@ -170,7 +169,6 @@ const ServicesManagement: React.FC = () => {
         toast.success("تم تحديث الخدمة بنجاح");
       } else {
         // Create new service
-        console.log("📝 Creating service with data:", {
           page_number: formData.page_number,
           title_ar: formData.title_ar,
           title_en: formData.title_en,
@@ -198,7 +196,6 @@ const ServicesManagement: React.FC = () => {
       fetchServices();
     } catch (error) {
       toast.dismiss(loadingToast);
-      console.error("❌ Error saving service:", error);
       const errorMessage =
         error instanceof Error ? error.message : "حدث خطأ أثناء حفظ الخدمة";
       toast.error(errorMessage);
@@ -216,7 +213,6 @@ const ServicesManagement: React.FC = () => {
       setServices(services.filter((s) => s.id !== id));
       toast.success("تم حذف الخدمة بنجاح");
     } catch (error) {
-      console.error("Error deleting service:", error);
       const errorMessage =
         error instanceof Error ? error.message : "حدث خطأ أثناء حذف الخدمة";
       toast.error(errorMessage);

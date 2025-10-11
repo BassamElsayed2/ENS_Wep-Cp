@@ -23,7 +23,6 @@ export function useDeleteUser() {
     },
     onError: (error: Error) => {
       toast.error(error.message || "فشل في حذف المستخدم");
-      console.error("Failed to delete user:", error);
     },
   });
 

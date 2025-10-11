@@ -19,7 +19,6 @@ const TransactionsHistory: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // Sample transaction data

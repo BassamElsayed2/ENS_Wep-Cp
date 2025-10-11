@@ -32,7 +32,6 @@ const PropertiesByCountry: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`); // Add your logic here
   };
 
   const [countries, setCountries] = useState<CountryData[]>([]);

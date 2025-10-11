@@ -132,7 +132,6 @@ const RecentTransactions: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // Transactions state with updated type
@@ -149,7 +148,6 @@ const RecentTransactions: React.FC = () => {
         setTransactions(mockTransactions);
         setTotalItems(mockTransactions.length);
       } catch (error) {
-        console.error("Error fetching transactions:", error);
       }
     };
 

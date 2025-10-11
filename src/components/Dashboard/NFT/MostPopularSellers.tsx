@@ -103,7 +103,6 @@ const MostPopularSellers: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // Pagination state

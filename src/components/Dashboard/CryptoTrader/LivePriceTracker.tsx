@@ -118,7 +118,6 @@ const LivePriceTracker: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // State variables
@@ -136,7 +135,6 @@ const LivePriceTracker: React.FC = () => {
         setCryptoData(mockCryptoData);
         setTotalItems(mockCryptoData.length);
       } catch (error) {
-        console.error("Error fetching crypto data:", error);
       }
     };
 

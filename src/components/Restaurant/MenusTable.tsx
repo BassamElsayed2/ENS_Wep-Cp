@@ -18,13 +18,11 @@ interface Restaurant {
 // Placeholder functions - implement your own API calls
 const getRestaurants = async (): Promise<Restaurant[]> => {
   // TODO: Implement API call to fetch restaurants
-  console.log("Fetching restaurants...");
   return [];
 };
 
 const deleteRestaurant = async (id: string): Promise<void> => {
   // TODO: Implement API call to delete restaurant
-  console.log("Deleting restaurant:", id);
 };
 
 const updateRestaurant = async (
@@ -32,7 +30,6 @@ const updateRestaurant = async (
   data: Partial<Restaurant>
 ): Promise<void> => {
   // TODO: Implement API call to update restaurant
-  console.log("Updating restaurant:", id, data);
 };
 import Link from "next/link";
 import { UUID } from "crypto";
@@ -56,7 +53,6 @@ const MenusTable: React.FC = () => {
         const data = await getRestaurants();
         setRestaurants(data);
       } catch (error) {
-        console.error("Error fetching restaurants:", error);
         toast.error("حدث خطأ أثناء تحميل البيانات");
       } finally {
         setIsLoading(false);
@@ -146,7 +142,6 @@ const MenusTable: React.FC = () => {
                 .remove([logoPath]);
             }
           } catch (error) {
-            console.error("Error deleting logo:", error);
           }
         }
 
@@ -162,7 +157,6 @@ const MenusTable: React.FC = () => {
                 .remove(imagePaths as string[]);
             }
           } catch (error) {
-            console.error("Error deleting images:", error);
           }
         }
 
@@ -173,7 +167,6 @@ const MenusTable: React.FC = () => {
         setRestaurants((prev) => prev.filter((r) => r.id !== restaurant.id));
         resolve("تم حذف المطعم بنجاح");
       } catch (error) {
-        console.error("Error deleting restaurant:", error);
         reject("حدث خطأ أثناء حذف المطعم");
       }
     });
@@ -213,7 +206,6 @@ const MenusTable: React.FC = () => {
         setEditingRestaurant(null);
         resolve("تم تحديث المطعم بنجاح");
       } catch (error) {
-        console.error("Error updating restaurant:", error);
         reject("حدث خطأ أثناء تحديث المطعم");
       }
     });
@@ -549,7 +541,6 @@ const MenusTable: React.FC = () => {
                             });
                             toast.success("تم رفع اللوجو بنجاح");
                           } catch (error) {
-                            console.error("Error uploading logo:", error);
                             toast.error("حدث خطأ أثناء رفع اللوجو");
                           }
                         }
@@ -630,7 +621,6 @@ const MenusTable: React.FC = () => {
                           `تم رفع ${uploadedUrls.length} صورة بنجاح`
                         );
                       } catch (error) {
-                        console.error("Error uploading images:", error);
                         toast.error("حدث خطأ أثناء رفع الصور");
                       }
                     }

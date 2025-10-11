@@ -105,7 +105,6 @@ const CustomerReviews: React.FC = () => {
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`Selected option: ${option}`);
   };
 
   // Filter reviews based on the selected option
