@@ -27,7 +27,7 @@ const BrandsTable: React.FC = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/api/brands");
+        const response = await fetch("http://localhost:4010/api/brands");
         const data = await response.json();
 
         // Ensure data is an array
@@ -95,7 +95,7 @@ const BrandsTable: React.FC = () => {
     formData.append("image", selectedImage);
 
     try {
-      const response = await fetch("http://localhost:5000/api/brands", {
+      const response = await fetch("http://localhost:4010/api/brands", {
         method: "POST",
         body: formData,
       });
@@ -130,7 +130,7 @@ const BrandsTable: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/brands/${editingBrand.id}`,
+        `http://localhost:4010/api/brands/${editingBrand.id}`,
         {
           method: "PUT",
           body: formData,
@@ -165,7 +165,7 @@ const BrandsTable: React.FC = () => {
     if (window.confirm("هل أنت متأكد من حذف هذا الشعار؟")) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/brands/${brand.id}`,
+          `http://localhost:4010/api/brands/${brand.id}`,
           {
             method: "DELETE",
           }

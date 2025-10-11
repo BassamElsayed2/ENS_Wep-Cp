@@ -1,10 +1,10 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010";
 
 export interface DevelopmentService {
   id: number;
   pageNumber: number;
-  titleAr: string;
-  titleEn: string;
+  titleAr?: string;
+  titleEn?: string;
   descriptionAr?: string;
   descriptionEn?: string;
   img: string;

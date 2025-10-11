@@ -72,13 +72,13 @@ const DesignPricingsManagement: React.FC = () => {
     setEditingPricing(pricing);
     setFormData({
       page_number: pricing.pageNumber,
-      title_ar: pricing.titleAr,
-      title_en: pricing.titleEn,
-      price: pricing.price,
+      title_ar: pricing.titleAr || "",
+      title_en: pricing.titleEn || "",
+      price: pricing.price || 0,
       items:
         pricing.items?.map((it) => ({
-          text_ar: it.textAr,
-          text_en: it.textEn,
+          text_ar: it.textAr || "",
+          text_en: it.textEn || "",
           display_order: it.displayOrder,
         })) || [],
     });
@@ -334,7 +334,7 @@ const DesignPricingsManagement: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.title_ar}
+                        value={formData.title_ar || ""}
                         onChange={(e) =>
                           setFormData({ ...formData, title_ar: e.target.value })
                         }
@@ -350,7 +350,7 @@ const DesignPricingsManagement: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.title_en}
+                        value={formData.title_en || ""}
                         onChange={(e) =>
                           setFormData({ ...formData, title_en: e.target.value })
                         }
@@ -367,7 +367,12 @@ const DesignPricingsManagement: React.FC = () => {
                       <input
                         type="number"
                         step="0.01"
-                        value={formData.price}
+                        value={
+                          formData.price !== undefined &&
+                          formData.price !== null
+                            ? formData.price
+                            : ""
+                        }
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -410,7 +415,7 @@ const DesignPricingsManagement: React.FC = () => {
                               <input
                                 type="text"
                                 placeholder="الميزة (عربي)"
-                                value={it.text_ar}
+                                value={it.text_ar || ""}
                                 onChange={(e) => {
                                   const next = [...formData.items];
                                   next[idx] = {
@@ -425,7 +430,7 @@ const DesignPricingsManagement: React.FC = () => {
                                 <input
                                   type="text"
                                   placeholder="Feature (English)"
-                                  value={it.text_en}
+                                  value={it.text_en || ""}
                                   onChange={(e) => {
                                     const next = [...formData.items];
                                     next[idx] = {

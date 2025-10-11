@@ -45,8 +45,10 @@ const ServicesManagement: React.FC = () => {
   // Filter services based on search term
   const filteredServices = services.filter(
     (service) =>
-      service.titleAr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (service.titleAr &&
+        service.titleAr.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (service.titleEn &&
+        service.titleEn.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (service.descriptionAr &&
         service.descriptionAr
           .toLowerCase()
@@ -115,8 +117,8 @@ const ServicesManagement: React.FC = () => {
     setEditingService(service);
     setFormData({
       page_number: service.pageNumber,
-      title_ar: service.titleAr,
-      title_en: service.titleEn,
+      title_ar: service.titleAr || "",
+      title_en: service.titleEn || "",
       description_ar: service.descriptionAr || "",
       description_en: service.descriptionEn || "",
     });
@@ -310,7 +312,7 @@ const ServicesManagement: React.FC = () => {
                           <div className="relative h-12 w-12 bg-gray-100 dark:bg-[#15203c] rounded-md overflow-hidden">
                             <Image
                               src={service.img}
-                              alt={service.titleEn}
+                              alt={service.titleEn || "Service"}
                               fill
                               className="object-contain p-1"
                             />
@@ -318,12 +320,12 @@ const ServicesManagement: React.FC = () => {
                         </td>
                         <td className="px-[20px] py-[15px] whitespace-nowrap">
                           <div className="text-sm font-medium text-black dark:text-white">
-                            {service.titleAr}
+                            {service.titleAr || "-"}
                           </div>
                         </td>
                         <td className="px-[20px] py-[15px] whitespace-nowrap">
                           <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {service.titleEn}
+                            {service.titleEn || "-"}
                           </div>
                         </td>
 

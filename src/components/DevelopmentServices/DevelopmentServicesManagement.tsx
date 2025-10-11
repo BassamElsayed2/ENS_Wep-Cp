@@ -43,8 +43,10 @@ const DevelopmentServicesManagement: React.FC = () => {
 
   const filteredServices = services.filter(
     (s) =>
-      s.titleAr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.titleAr &&
+        s.titleAr.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (s.titleEn &&
+        s.titleEn.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (s.descriptionAr &&
         s.descriptionAr.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (s.descriptionEn &&
@@ -104,8 +106,8 @@ const DevelopmentServicesManagement: React.FC = () => {
     setEditingService(service);
     setFormData({
       page_number: service.pageNumber,
-      title_ar: service.titleAr,
-      title_en: service.titleEn,
+      title_ar: service.titleAr || "",
+      title_en: service.titleEn || "",
       description_ar: service.descriptionAr || "",
       description_en: service.descriptionEn || "",
     });
@@ -283,7 +285,7 @@ const DevelopmentServicesManagement: React.FC = () => {
                           <div className="relative h-12 w-12 bg-gray-100 dark:bg-[#15203c] rounded-md overflow-hidden">
                             <Image
                               src={service.img}
-                              alt={service.titleEn}
+                              alt={service.titleEn || "Development Service"}
                               fill
                               className="object-contain p-1"
                             />
@@ -291,12 +293,12 @@ const DevelopmentServicesManagement: React.FC = () => {
                         </td>
                         <td className="px-[20px] py-[15px] whitespace-nowrap">
                           <div className="text-sm font-medium text-black dark:text-white">
-                            {service.titleAr}
+                            {service.titleAr || "-"}
                           </div>
                         </td>
                         <td className="px-[20px] py-[15px] whitespace-nowrap">
                           <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {service.titleEn}
+                            {service.titleEn || "-"}
                           </div>
                         </td>
                         <td className="px-[20px] py-[15px] whitespace-nowrap text-sm font-medium">
