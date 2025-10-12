@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../../../services/apiConfig";
 
 interface Brand {
   id: number;
@@ -27,7 +28,7 @@ const BrandsTable: React.FC = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("http://localhost:4010/api/brands");
+        const response = await fetch(`${API_BASE_URL}/api/brands`);
         const data = await response.json();
 
         // Ensure data is an array
@@ -95,7 +96,7 @@ const BrandsTable: React.FC = () => {
     formData.append("image", selectedImage);
 
     try {
-      const response = await fetch("http://localhost:4010/api/brands", {
+      const response = await fetch(`${API_BASE_URL}/api/brands`, {
         method: "POST",
         body: formData,
       });
@@ -130,7 +131,7 @@ const BrandsTable: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4010/api/brands/${editingBrand.id}`,
+        `${API_BASE_URL}/api/brands/${editingBrand.id}`,
         {
           method: "PUT",
           body: formData,
@@ -164,12 +165,9 @@ const BrandsTable: React.FC = () => {
   const handleDelete = async (brand: Brand) => {
     if (window.confirm("هل أنت متأكد من حذف هذا الشعار؟")) {
       try {
-        const response = await fetch(
-          `http://localhost:4010/api/brands/${brand.id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`${API_BASE_URL}/api/brands/${brand.id}`, {
+          method: "DELETE",
+        });
 
         if (response.ok) {
           setBrands(brands.filter((b) => b.id !== brand.id));
