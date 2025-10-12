@@ -1,5 +1,7 @@
+import { API_URL } from "./apiConfig";
+
 // API base URL
-const API_BASE_URL = "http://localhost:4010/api";
+const API_BASE_URL = API_URL;
 const USERS_URL = `${API_BASE_URL}/users`;
 const AUTH_URL = `${API_BASE_URL}/auth`;
 

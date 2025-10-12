@@ -1,4 +1,6 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010";
+import { API_BASE_URL } from "./apiConfig";
+
+const API_URL = API_BASE_URL;
 
 export interface DesignPricing {
   id: number;

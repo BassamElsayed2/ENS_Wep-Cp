@@ -1,5 +1,7 @@
+import { API_URL } from "./apiConfig";
+
 // API base URL للـ Authentication
-const API_BASE_URL = "http://localhost:4010/api";
+const API_BASE_URL = API_URL;
 
 export interface LoginCredentials {
   email: string;
